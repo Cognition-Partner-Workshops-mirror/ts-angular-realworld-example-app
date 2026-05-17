@@ -26,8 +26,9 @@ export const routes: Routes = [
     canActivate: [() => inject(UserService).isAuthenticated.pipe(map(isAuth => !isAuth))],
   },
   {
+    // Dedicated sign-up page with enhanced validation (confirm password, field-level errors)
     path: 'register',
-    loadComponent: () => import('./core/auth/auth.component'),
+    loadComponent: () => import('./features/signup/signup.component'),
     canActivate: [() => inject(UserService).isAuthenticated.pipe(map(isAuth => !isAuth))],
   },
   {
