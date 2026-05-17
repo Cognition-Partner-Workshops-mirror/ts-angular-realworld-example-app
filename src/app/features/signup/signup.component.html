@@ -1,0 +1,94 @@
+<div class="auth-page">
+  <div class="container page">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 col-xs-12">
+        <h1 class="text-xs-center">Sign up</h1>
+        <p class="text-xs-center">
+          <a [routerLink]="['/login']">Have an account?</a>
+        </p>
+
+        <!-- Display server-side validation errors -->
+        <app-list-errors [errors]="errors()" />
+
+        <form [formGroup]="signupForm" (ngSubmit)="submitForm()">
+          <fieldset [disabled]="isSubmitting()">
+            <!-- Username field with minimum length validation -->
+            <fieldset class="form-group">
+              <input
+                formControlName="username"
+                placeholder="Username"
+                class="form-control form-control-lg"
+                type="text"
+              />
+              @if (signupForm.controls.username.touched && signupForm.controls.username.errors) {
+                <small class="text-danger">
+                  @if (signupForm.controls.username.errors['required']) {
+                    Username is required.
+                  } @else if (signupForm.controls.username.errors['minlength']) {
+                    Username must be at least 3 characters.
+                  }
+                </small>
+              }
+            </fieldset>
+
+            <!-- Email field with format validation -->
+            <fieldset class="form-group">
+              <input formControlName="email" placeholder="Email" class="form-control form-control-lg" type="email" />
+              @if (signupForm.controls.email.touched && signupForm.controls.email.errors) {
+                <small class="text-danger">
+                  @if (signupForm.controls.email.errors['required']) {
+                    Email is required.
+                  } @else if (signupForm.controls.email.errors['email']) {
+                    Please enter a valid email address.
+                  }
+                </small>
+              }
+            </fieldset>
+
+            <!-- Password field with minimum length validation -->
+            <fieldset class="form-group">
+              <input
+                formControlName="password"
+                placeholder="Password"
+                class="form-control form-control-lg"
+                type="password"
+                (input)="checkPasswordMatch()"
+              />
+              @if (signupForm.controls.password.touched && signupForm.controls.password.errors) {
+                <small class="text-danger">
+                  @if (signupForm.controls.password.errors['required']) {
+                    Password is required.
+                  } @else if (signupForm.controls.password.errors['minlength']) {
+                    Password must be at least 8 characters.
+                  }
+                </small>
+              }
+            </fieldset>
+
+            <!-- Confirm password field with match validation -->
+            <fieldset class="form-group">
+              <input
+                formControlName="confirmPassword"
+                placeholder="Confirm Password"
+                class="form-control form-control-lg"
+                type="password"
+                (input)="checkPasswordMatch()"
+              />
+              @if (passwordMismatch()) {
+                <small class="text-danger"> Passwords do not match. </small>
+              }
+            </fieldset>
+
+            <button
+              class="btn btn-lg btn-primary pull-xs-right"
+              [disabled]="!signupForm.valid || passwordMismatch()"
+              type="submit"
+            >
+              Sign up
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
