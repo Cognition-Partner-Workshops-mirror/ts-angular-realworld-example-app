@@ -16,7 +16,7 @@
  * Article: article-preview, article-meta, article-content, article-actions, articles-toggle
  * Comments: comment-author, comment-author-img, mod-options, date-posted
  * User: user-info, user-img, user-pic
- * Misc: banner, logo-font, sidebar, feed-toggle, error-messages, counter,
+ * Misc: banner, logo-font, sidebar, feed-toggle, error-messages-table, counter,
  *       preview-link, author, date, info, attribution, active, disabled,
  *       pull-xs-right, text-xs-center, empty-feed-message
  *
@@ -1043,15 +1043,42 @@ footer .attribution {
 }
 
 /* ============================================================================
- * ERROR MESSAGES
+ * ERROR MESSAGES TABLE
+ * Displays API/validation errors in a structured tabular format
  * ============================================================================ */
 
-.error-messages {
-  color: var(--danger);
-  font-weight: bold;
-  padding-left: 2.5rem;
+.error-messages-table {
+  width: 100%;
+  border-collapse: collapse;
   margin-bottom: 1rem;
-  list-style: disc;
+  font-size: 0.9rem;
+}
+
+.error-messages-table thead th {
+  background-color: var(--danger);
+  color: #fff;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--danger);
+}
+
+.error-messages-table tbody td {
+  color: var(--danger);
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--danger-light);
+  background-color: #fff;
+}
+
+.error-messages-table tbody tr:nth-child(even) td {
+  background-color: #fdf2f2;
+}
+
+.error-messages-table tbody td:first-child {
+  font-weight: 700;
+  text-transform: capitalize;
+  white-space: nowrap;
 }
 
 /* ============================================================================
