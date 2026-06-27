@@ -1,7 +1,96 @@
-@if (errorList) {
-  <ul class="error-messages">
-    @for (error of errorList; track error) {
-      <li>{{ error }}</li>
+@if (errorItems().length > 0) {
+  <div class="error-list-container">
+    <!-- Filter and Sort toolbar (shown when multiple errors exist) -->
+    @if (errorItems().length > 1) {
+      <div class="error-list-toolbar">
+        <!-- Text search filter -->
+        <div class="error-filter-search">
+          <input
+            class="form-control error-filter-input"
+            type="text"
+            placeholder="Filter errors..."
+            [ngModel]="filterText()"
+            (ngModelChange)="onFilterTextChange($event)"
+          />
+          @if (activeFilterCount() > 0) {
+            <button class="error-clear-btn" (click)="clearFilters()" title="Clear all filters">&times;</button>
+          }
+        </div>
+
+        <!-- Severity filter pills -->
+        <div class="error-severity-filters">
+          <button
+            class="error-severity-pill error-severity-pill--error"
+            [class.active]="filterSeverity() === 'error'"
+            (click)="toggleSeverityFilter('error')"
+          >
+            Error
+          </button>
+          <button
+            class="error-severity-pill error-severity-pill--warning"
+            [class.active]="filterSeverity() === 'warning'"
+            (click)="toggleSeverityFilter('warning')"
+          >
+            Warning
+          </button>
+          <button
+            class="error-severity-pill error-severity-pill--info"
+            [class.active]="filterSeverity() === 'info'"
+            (click)="toggleSeverityFilter('info')"
+          >
+            Info
+          </button>
+        </div>
+
+        <!-- Sort controls -->
+        <div class="error-sort-controls">
+          <span class="error-sort-label">Sort:</span>
+          <button class="error-sort-btn" [class.active]="sortField() === 'severity'" (click)="updateSort('severity')">
+            Severity
+            @if (sortField() === 'severity') {
+              <span class="error-sort-arrow">{{ sortDirection() === 'asc' ? '&#9650;' : '&#9660;' }}</span>
+            }
+          </button>
+          <button class="error-sort-btn" [class.active]="sortField() === 'field'" (click)="updateSort('field')">
+            Field
+            @if (sortField() === 'field') {
+              <span class="error-sort-arrow">{{ sortDirection() === 'asc' ? '&#9650;' : '&#9660;' }}</span>
+            }
+          </button>
+          <button class="error-sort-btn" [class.active]="sortField() === 'timestamp'" (click)="updateSort('timestamp')">
+            Time
+            @if (sortField() === 'timestamp') {
+              <span class="error-sort-arrow">{{ sortDirection() === 'asc' ? '&#9650;' : '&#9660;' }}</span>
+            }
+          </button>
+        </div>
+      </div>
     }
-  </ul>
+
+    <!-- Error items list -->
+    <ul class="error-messages error-list-rich">
+      @for (item of displayErrors(); track item.field + item.message) {
+        <li class="error-item error-item--{{ item.severity }}">
+          <!-- Severity badge -->
+          <span class="error-badge error-badge--{{ item.severity }}">
+            {{ item.severity }}
+          </span>
+          <!-- Error content -->
+          <span class="error-content">
+            <strong class="error-field">{{ item.field }}</strong>
+            <span class="error-message">{{ item.message }}</span>
+          </span>
+          <!-- Optional error code -->
+          @if (item.code) {
+            <span class="error-code">{{ item.code }}</span>
+          }
+        </li>
+      }
+    </ul>
+
+    <!-- No results after filtering -->
+    @if (displayErrors().length === 0 && errorItems().length > 0) {
+      <p class="error-no-results">No errors match the current filter.</p>
+    }
+  </div>
 }
