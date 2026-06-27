@@ -13,7 +13,7 @@
     <!-- Filtered error list -->
     @if (filteredErrors().length) {
       <ul class="error-messages">
-        @for (error of filteredErrors(); track error) {
+        @for (error of filteredErrors(); track $index) {
           <li>{{ error }}</li>
         }
       </ul>
