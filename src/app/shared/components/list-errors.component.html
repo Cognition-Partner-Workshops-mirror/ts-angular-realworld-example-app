@@ -1,7 +1,19 @@
-@if (errorList) {
-  <ul class="error-messages">
-    @for (error of errorList; track error) {
-      <li>{{ error }}</li>
-    }
-  </ul>
+<!-- Error messages displayed in tabular format with field and message columns -->
+@if (errorEntries.length) {
+  <table class="error-messages-table">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Error Message</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (entry of errorEntries; track entry.field) {
+        <tr>
+          <td>{{ entry.field }}</td>
+          <td>{{ entry.message }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
 }
