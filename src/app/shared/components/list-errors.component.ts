@@ -24,10 +24,18 @@ export class ListErrorsComponent {
     return this.errorList().filter(err => err.toLowerCase().includes(filter));
   });
 
-  /** Accept the Errors input and flatten it into the errorList signal */
+  /** Accept the Errors input and flatten it into the errorList signal.
+   *  Values may be strings or string arrays (RealWorld API returns arrays),
+   *  so each array entry becomes a separate list item. */
   @Input() set errors(errorList: Errors | null) {
     this.errorList.set(
-      errorList ? Object.keys(errorList.errors || {}).map(key => `${key} ${errorList.errors[key]}`) : [],
+      errorList
+        ? Object.keys(errorList.errors || {}).flatMap(key => {
+            const value = errorList.errors[key];
+            const messages = Array.isArray(value) ? value : [value];
+            return messages.map(msg => `${key} ${msg}`);
+          })
+        : [],
     );
     // Reset filter when a new set of errors arrives
     this.filterText.set('');
