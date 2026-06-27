@@ -1,7 +1,25 @@
-@if (errorList) {
-  <ul class="error-messages">
-    @for (error of errorList; track error) {
-      <li>{{ error }}</li>
+<!-- Error list container: only rendered when errors exist -->
+@if (errorList().length) {
+  <div class="error-list-container">
+    <!-- Filter input: allows narrowing visible errors by text -->
+    <input
+      type="text"
+      class="error-filter-input"
+      placeholder="Filter errors…"
+      [ngModel]="filterText()"
+      (ngModelChange)="filterText.set($event)"
+    />
+
+    <!-- Filtered error list -->
+    @if (filteredErrors().length) {
+      <ul class="error-messages">
+        @for (error of filteredErrors(); track $index) {
+          <li>{{ error }}</li>
+        }
+      </ul>
+    } @else {
+      <!-- Empty state when filter matches nothing -->
+      <p class="error-filter-empty">No errors match the current filter.</p>
     }
-  </ul>
+  </div>
 }
